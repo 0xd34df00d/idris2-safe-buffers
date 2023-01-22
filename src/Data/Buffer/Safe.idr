@@ -8,8 +8,6 @@ import Data.Storable
 
 %default total
 
--- * Safe buffer definition and operations
-
 export
 data SBuffer : (0 n : Nat) -> (0 ty : Type) -> Type where
   MkSB : (buf : Buffer) -> SBuffer n ty
@@ -48,6 +46,21 @@ getAt : HasIO io =>
         (idx : Fin n) ->
         io ty
 getAt (MkSB buf) = getAtByte buf . toByteIdx ty
+
+
+export %inline
+castBuffer : (Storable ty, Storable ty') =>
+             {auto 0 sameSize : sizeofTy ty' * n' = sizeofTy ty * n} ->
+             (buf : SBuffer n ty) ->
+             SBuffer n' ty'
+castBuffer (MkSB buf) = MkSB buf
+
+export %inline
+castToBytes : Storable ty =>
+              (buf : SBuffer n ty) ->
+              SBuffer (sizeofTy ty * n) Bits8
+castToBytes = castBuffer {sameSize = multOneLeftNeutral _}
+
 
 export
 toVect : HasIO io =>
