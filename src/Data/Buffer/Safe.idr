@@ -61,6 +61,23 @@ castToBytes : Storable ty =>
               SBuffer (sizeofTy ty * n) Bits8
 castToBytes = castBuffer {sameSize = multOneLeftNeutral _}
 
+export
+copyData : HasIO io =>
+           Storable ty =>
+           (elemCnt : Nat) ->
+           (srcBuf : SBuffer (elemCnt + srcN) ty) ->
+           (dstBuf : SBuffer (elemCnt + dstN) ty) ->
+           (srcPos : Fin srcN) ->
+           (dstPos : Fin dstN) ->
+           io ()
+copyData elemCnt (MkSB srcBuf) (MkSB dstBuf) srcPos dstPos =
+  B.copyData
+    srcBuf
+    (toByteIdx ty srcPos)
+    (cast $ elemCnt * sizeofTy ty)
+    dstBuf
+    (toByteIdx ty dstPos)
+
 
 export
 toVect : HasIO io =>
