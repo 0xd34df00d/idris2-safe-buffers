@@ -2,6 +2,7 @@ module Data.Buffer.Safe
 
 import Data.Buffer as B
 import Data.Fin
+import Data.Vect
 
 import Data.Storable
 
@@ -47,3 +48,23 @@ getAt : HasIO io =>
         (idx : Fin n) ->
         io ty
 getAt (MkSB buf) = getAtByte buf . toByteIdx ty
+
+export
+toVect : HasIO io =>
+         Storable ty =>
+         {n : _} ->
+         (buf : SBuffer n ty) ->
+         io (Vect n ty)
+toVect buf = traverse (getAt buf) range
+
+export
+fromVect : HasIO io =>
+           Storable ty =>
+           {n : _} ->
+           (values : Vect n ty) ->
+           io (Maybe (SBuffer n ty))
+fromVect values = do
+  Just buf <- newBuffer n
+      | Nothing => pure Nothing
+  traverse_ (uncurry $ setAt buf) (zip range values)
+  pure $ Just buf
