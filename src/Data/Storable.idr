@@ -7,7 +7,7 @@ import Data.Buffer
 public export
 interface Storable (0 ty : Type) where
   %inline
-  sizeof : Int
+  sizeof : Nat
   %inline
   setAtByte : HasIO io =>
               (buf : Buffer) ->
@@ -40,5 +40,5 @@ Storable Double where sizeof = 8 ; setAtByte = setDouble ; getAtByte = getDouble
 
 
 public export %inline
-sizeofTy : (0 ty : Type) -> Storable ty => Int
+sizeofTy : (0 ty : Type) -> Storable ty => Nat
 sizeofTy ty = sizeof {ty}

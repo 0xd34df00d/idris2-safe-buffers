@@ -22,7 +22,7 @@ toByteIdx : (0 ty : Type) ->
             Storable ty =>
             (idx : Fin n) ->
             Int
-toByteIdx ty idx = cast (finToNat idx) * sizeofTy ty
+toByteIdx ty idx = cast $ finToNat idx * sizeofTy ty
 
 
 export %inline
@@ -30,7 +30,7 @@ newBuffer : HasIO io =>
             Storable ty =>
             (n : Nat) ->
             io (Maybe (SBuffer n ty))
-newBuffer n = map (map MkSB) $ B.newBuffer (cast n * sizeofTy ty)
+newBuffer n = map (map MkSB) $ B.newBuffer (cast $ n * sizeofTy ty)
 
 export %inline
 setAt : HasIO io =>
