@@ -36,6 +36,21 @@ export %inline
 Storable Int where sizeof = 8 ; setAtByte = setInt ; getAtByte = getInt
 
 export %inline
+Storable Int8  where sizeof = 1 ; setAtByte = setInt8  ; getAtByte = getInt8
+
+export %inline
+Storable Int16 where sizeof = 2 ; setAtByte = setInt16 ; getAtByte = getInt16
+
+export %inline
+Storable Int32 where sizeof = 4 ; setAtByte = setInt32 ; getAtByte = getInt32
+
+export %inline
+Storable Int64 where sizeof = 8 ; setAtByte = setInt64 ; getAtByte = getInt64
+
+export %inline
+Storable Bool where sizeof = 1 ; setAtByte = setBool ; getAtByte = getBool
+
+export %inline
 Storable Double where sizeof = 8 ; setAtByte = setDouble ; getAtByte = getDouble
 
 
